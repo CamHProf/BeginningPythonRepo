@@ -1,0 +1,63 @@
+# Investment Interest Calculator
+import math
+
+initial_investment = float(input("Enter the initial investment: "))
+time = float(input("Enter number of years: "))
+rate_of_interest = float(input("Enter annual interest rate (remember to use decimal to make percentage): "))
+
+Final_Amount = initial_investment * math.exp(rate_of_interest * time)
+
+print("The value of your account after", time, "years, is:", Final_Amount)
+
+# Monthly Interest Calculator 
+deposit = float(input("Enter your monthly deposit amount: "))
+rate_of_interest = float(input("Enter annual interest (please use decimal for percentage): "))
+
+monthly_compound_rate = rate_of_interest / 12
+periods = 24
+
+P = deposit * ((1 + monthly_compound_rate) ** periods - 1) / monthly_compound_rate
+
+print("Balance after 2 years:", P)
+
+#Target for Down Payment 
+down_payment_target = float(input("Enter your down payment amount you want after 2 years: "))
+rate_of_interest = float(input("Enter annual interest (please use decimal for percentage): "))
+
+monthly_compound_rate = rate_of_interest / 12
+periods = 24
+
+monthly_deposit_amount = down_payment_target * monthly_compound_rate / ((1 + monthly_compound_rate) ** periods - 1)
+
+print("Balance after 2 years:", monthly_deposit_amount)
+
+# Loan Repayment Amount
+loan_amount = float(input("Enter loan amount: "))
+rate_of_interest = float(input("Enter annual interest rate (as a decimal): "))
+Loan_term_in_years = float(input("Enter loan term in years: "))
+
+months = 12
+monthly_rate = rate_of_interest / months
+total_payments = Loan_term_in_years * months
+
+monthly_payment_end = loan_amount * monthly_rate / (1 - (1 + monthly_rate) ** (-total_payments))
+
+print("Monthly mortgage payment:", monthly_payment_end)
+
+# House Affordability Calculator - 15 and 30 year mortgages
+affordable_monthly_payment = float(input("Enter the monthly payment you can afford: "))
+rate_of_interest = float(input("Enter annual interest rate (as a decimal): "))
+
+months = 12
+monthly_rate = rate_of_interest / months
+
+years_15 = 15
+total_payments_15 = years_15 * months
+loan_amount_15 = affordable_monthly_payment * (1 - (1 + monthly_rate) ** (-total_payments_15)) / monthly_rate
+
+years_30 = 30
+total_payments_30 = years_30 * months
+loan_amount_30 = affordable_monthly_payment * (1 - (1 + monthly_rate) ** (-total_payments_30)) / monthly_rate
+
+print("Loan amount you can afford for a 15-year mortgage:", loan_amount_15)
+print("Loan amount you can afford for a 30-year mortgage:", loan_amount_30)
