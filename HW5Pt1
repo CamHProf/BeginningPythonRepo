@@ -1,0 +1,12 @@
+def chaos(growth_rate, current_value, num_iterations):
+    for i in range(num_iterations):
+        current_value = growth_rate * current_value * (1 - current_value)
+        print(current_value)
+
+def Chaos_Runner():
+    growth_rate = float(input("Enter growth rate: "))
+    current_value = float(input("Enter initial value: "))
+    num_iterations = int(input("Enter number of iterations: "))
+    chaos(growth_rate, current_value, num_iterations)
+
+Chaos_Runner()
