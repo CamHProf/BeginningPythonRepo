@@ -1,0 +1,22 @@
+from graphics import *
+
+win = GraphWin("Logistic Map (Points)", 800, 600)
+
+x_axis = Line(Point(50, 550), Point(750, 550))
+y_axis = Line(Point(50, 550), Point(50, 50))
+x_axis.draw(win)
+y_axis.draw(win)
+
+growth_rate = 3.8
+population = 0.2
+
+for t in range(1, 101):
+    x = 50 + t * 7
+    y = 550 - population * 500
+    point = Point(x, y)
+    point.setFill("red")
+    point.draw(win)
+    population = growth_rate * population * (1 - population)
+
+win.getMouse()
+win.close()
