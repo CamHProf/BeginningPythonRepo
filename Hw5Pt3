@@ -1,0 +1,15 @@
+def calculate_payment(principal, annual_rate, compounding_per_year, num_years):
+    rate_per_period = annual_rate / compounding_per_year
+    total_periods = compounding_per_year * num_years
+    denominator = (1 - (1 + rate_per_period) ** -total_periods) / rate_per_period
+    return principal / denominator
+
+def Final_Calculation():
+    principal = float(input("Amount you start out with: "))
+    annual_rate = float(input("Annual interest rate, using decimal: "))
+    compounding_per_year = int(input("Compounds per year: "))
+    num_years = int(input("Number of years: "))
+    monthly_payment = calculate_payment(principal, annual_rate, compounding_per_year, num_years)
+    print("Monthly payment:", round(monthly_payment, 2))
+
+Final_Calculation()
