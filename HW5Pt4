@@ -1,0 +1,47 @@
+from graphics import *
+import math
+
+def create_ngon(num_sides, radius_length, center_point):
+    vertex_list = []
+    angle_step = 360 / num_sides
+    for side_index in range(num_sides):
+        angle_radians = math.radians(side_index * angle_step)
+        x_coord = center_point.getX() + radius_length * math.cos(angle_radians)
+        y_coord = center_point.getY() + radius_length * math.sin(angle_radians)
+        vertex_list.append(Point(x_coord, y_coord))
+    return Polygon(vertex_list)
+
+def draw_polygon_from_entry(graphics_window, sides_entry, center_point, radius_length):
+    number_of_sides = int(sides_entry.getText())
+    polygon_shape = create_ngon(number_of_sides, radius_length, center_point)
+    polygon_shape.setFill("lightblue")
+    polygon_shape.draw(graphics_window)
+    return polygon_shape
+
+def main():
+    window = GraphWin("Draw n-gon", 600, 600)
+    center_of_window = Point(300, 300)
+    polygon_radius = 200
+
+    Text(Point(300, 550), "Number of sides:").draw(window)
+    sides_input = Entry(Point(300, 520), 5)
+    sides_input.setText("5")
+    sides_input.draw(window)
+
+    graph_button = Rectangle(Point(250, 470), Point(350, 500))
+    graph_button.setFill("lightgray")
+    graph_button.draw(window)
+    button_label = Text(Point(300, 485), "Graph")
+    button_label.draw(window)
+
+    while True:
+        mouse_click = window.getMouse()
+        if 250 <= mouse_click.getX() <= 350 and 470 <= mouse_click.getY() <= 500:
+            if button_label.getText() == "Graph":
+                draw_polygon_from_entry(window, sides_input, center_of_window, polygon_radius)
+                button_label.setText("Exit")
+            else:
+                window.close()
+                break
+
+main()
