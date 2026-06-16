@@ -1,0 +1,38 @@
+from graphics import *
+import math
+
+num_sides = int(input("Number of sides: "))
+radius = int(input("Radius: "))
+
+win = GraphWin("Rotated Polygon", 600, 600)
+center_point = Point(300, 300)
+
+# First compute vertices (as in Problem 1)
+vertices_list = []
+angle_between_sides = 360 / num_sides
+for side_index in range(num_sides):
+    angle_radians = math.radians(side_index * angle_between_sides)
+    x_coord = center_point.getX() + radius * math.cos(angle_radians)
+    y_coord = center_point.getY() + radius * math.sin(angle_radians)
+    vertices_list.append(Point(x_coord, y_coord))
+
+# Rotate each vertex by -90 degrees around the center
+rotated_vertices = []
+for vertex in vertices_list:
+    # Translate to origin, rotate, translate back
+    dx = vertex.getX() - center_point.getX()
+    dy = vertex.getY() - center_point.getY()
+    # Rotation by -90 degrees (clockwise)
+    new_dx = dy          # because cos(-90)=0, sin(-90)=-1
+    new_dy = -dx
+    new_x = center_point.getX() + new_dx
+    new_y = center_point.getY() + new_dy
+    rotated_vertices.append(Point(new_x, new_y))
+
+# Draw rotated polygon
+polygon_shape = Polygon(rotated_vertices)
+polygon_shape.setFill("lightgreen")
+polygon_shape.draw(win)
+
+win.getMouse()
+win.close()
