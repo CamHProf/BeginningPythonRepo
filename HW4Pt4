@@ -1,0 +1,28 @@
+from graphics import *
+
+win = GraphWin("Logistic Map (Lines)", 800, 600)
+
+x_axis = Line(Point(50, 550), Point(750, 550))
+y_axis = Line(Point(50, 550), Point(50, 50))
+x_axis.draw(win)
+y_axis.draw(win)
+
+growth_rate = 3.8
+population = 0.2
+previous_point = None
+
+for t in range(1, 101):
+    x = 50 + t * 7
+    y = 550 - population * 500
+    current_point = Point(x, y)
+    current_point.setFill("blue")
+    current_point.draw(win)
+    if previous_point is not None:
+        line = Line(previous_point, current_point)
+        line.setFill("blue")
+        line.draw(win)
+    previous_point = current_point
+    population = growth_rate * population * (1 - population)
+
+win.getMouse()
+win.close()
