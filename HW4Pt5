@@ -1,0 +1,79 @@
+from graphics import *
+
+win = GraphWin("Logistic Map GUI", 800, 600)
+
+Text(Point(150, 580), "Growth rate (r) =").draw(win)
+r_entry = Entry(Point(300, 580), 6)
+r_entry.setText("3.8")
+r_entry.draw(win)
+
+Text(Point(450, 580), "Initial P0 =").draw(win)
+p0_entry = Entry(Point(600, 580), 6)
+p0_entry.setText("0.2")
+p0_entry.draw(win)
+
+Text(Point(150, 550), "Steps =").draw(win)
+steps_entry = Entry(Point(300, 550), 6)
+steps_entry.setText("100")
+steps_entry.draw(win)
+
+Text(Point(450, 550), "Style (points/lines):").draw(win)
+style_entry = Entry(Point(650, 550), 10)
+style_entry.setText("lines")
+style_entry.draw(win)
+
+button = Rectangle(Point(350, 500), Point(450, 540))
+button.setFill("lightgray")
+button.draw(win)
+button_text = Text(Point(400, 520), "Graph")
+button_text.draw(win)
+
+x_axis = Line(Point(50, 500), Point(750, 500))
+y_axis = Line(Point(50, 500), Point(50, 50))
+x_axis.draw(win)
+y_axis.draw(win)
+
+drawn = []
+
+def clear():
+    for obj in drawn:
+        obj.undraw()
+    drawn.clear()
+
+def draw_graph():
+    clear()
+    try:
+        r = float(r_entry.getText())
+        p0 = float(p0_entry.getText())
+        steps = int(steps_entry.getText())
+        style = style_entry.getText().strip().lower()
+    except:
+        return
+    if steps > 100:
+        steps = 100
+    pop = p0
+    prev = None
+    for t in range(1, steps + 1):
+        x = 50 + t * 7
+        y = 500 - pop * 450
+        pt = Point(x, y)
+        pt.setFill("red")
+        pt.draw(win)
+        drawn.append(pt)
+        if style == "lines" and prev is not None:
+            line = Line(prev, pt)
+            line.setFill("red")
+            line.draw(win)
+            drawn.append(line)
+        prev = pt
+        pop = r * pop * (1 - pop)
+
+while True:
+    click = win.getMouse()
+    if 350 <= click.getX() <= 450 and 500 <= click.getY() <= 540:
+        if button_text.getText() == "Graph":
+            draw_graph()
+            button_text.setText("Exit")
+        else:
+            win.close()
+            break
