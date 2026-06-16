@@ -1,0 +1,28 @@
+from graphics import *
+
+def logistic_next(growth_rate, current_population):
+    return growth_rate * current_population * (1 - current_population)
+
+def main():
+    graphics_window = GraphWin("Logistic Map", 800, 600)
+
+    x_axis_line = Line(Point(50, 550), Point(750, 550))
+    y_axis_line = Line(Point(50, 550), Point(50, 50))
+    x_axis_line.draw(graphics_window)
+    y_axis_line.draw(graphics_window)
+
+    growth_rate_value = 3.8
+    population_value = 0.2
+
+    for time_step in range(1, 101):
+        population_value = logistic_next(growth_rate_value, population_value)
+        x_pixel = 50 + time_step * 7
+        y_pixel = 550 - population_value * 500
+        data_point = Point(x_pixel, y_pixel)
+        data_point.setFill("red")
+        data_point.draw(graphics_window)
+
+    graphics_window.getMouse()
+    graphics_window.close()
+
+main()
