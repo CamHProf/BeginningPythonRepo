@@ -1,0 +1,15 @@
+def classify_age():
+    age = int(input("Enter your age: "))
+    
+    if age >= 100:
+        print("Congratulations! You made it on the Smucker's jar!")
+    elif age >= 65:
+        print("Senior")
+    elif age >= 20:
+        print("Adult")
+    elif age >= 13:
+        print("Teenager")
+    else:
+        print("Child")
+
+classify_age()
