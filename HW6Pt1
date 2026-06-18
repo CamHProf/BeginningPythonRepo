@@ -1,0 +1,16 @@
+def chaos(growth_rate, current_value, num_iterations):
+    for i in range(num_iterations):
+        current_value = growth_rate * current_value * (1 - current_value)
+        print(current_value)
+
+def run_chaos():
+    growth_rate = float(input("Enter growth rate: "))
+    current_value = float(input("Enter initial value (between 0 and 1): "))
+    num_iterations = int(input("Enter number of iterations: "))
+    
+    if current_value < 0 or current_value > 1:
+        print("Error: Initial value must be between 0 and 1")
+    else:
+        chaos(growth_rate, current_value, num_iterations)
+
+run_chaos()
