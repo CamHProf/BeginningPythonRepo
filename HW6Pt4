@@ -1,0 +1,29 @@
+from graphics import *
+
+def is_button_clicked(click, button):
+    x1 = button.getP1().getX()
+    y1 = button.getP1().getY()
+    x2 = button.getP2().getX()
+    y2 = button.getP2().getY()
+    return x1 <= click.getX() <= x2 and y1 <= click.getY() <= y2
+
+def test_button():
+    window = GraphWin("Button Click Test", 400, 400)
+    button = Rectangle(Point(150, 150), Point(250, 250))
+    button.setFill("lightgray")
+    button.draw(window)
+    Text(Point(200, 200), "Click Me").draw(window)
+    result = Text(Point(200, 350), "")
+    result.draw(window)
+    
+    for i in range(10):
+        click = window.getMouse()
+        if is_button_clicked(click, button):
+            result.setText("Button was clicked!")
+        else:
+            result.setText("Button was NOT clicked")
+    
+    window.getMouse()
+    window.close()
+
+test_button()
