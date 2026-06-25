@@ -1,0 +1,49 @@
+def date_shift_encipher(message, date_string):
+    date_digits = ""
+    for char in date_string:
+        if char.isdigit():
+            date_digits = date_digits + char
+    
+    ciphertext = ""
+    for i in range(len(message)):
+        shift = int(date_digits[i % len(date_digits)])
+        if 'a' <= message[i] <= 'z':
+            new_char = chr((ord(message[i]) - ord('a') + shift) % 26 + ord('a'))
+            ciphertext = ciphertext + new_char
+        elif 'A' <= message[i] <= 'Z':
+            new_char = chr((ord(message[i]) - ord('A') + shift) % 26 + ord('A'))
+            ciphertext = ciphertext + new_char
+        else:
+            ciphertext = ciphertext + message[i]
+    return ciphertext
+
+def date_shift_decipher(ciphertext, date_string):
+    date_digits = ""
+    for char in date_string:
+        if char.isdigit():
+            date_digits = date_digits + char
+    
+    plaintext = ""
+    for i in range(len(ciphertext)):
+        shift = int(date_digits[i % len(date_digits)])
+        if 'a' <= ciphertext[i] <= 'z':
+            new_char = chr((ord(ciphertext[i]) - ord('a') - shift) % 26 + ord('a'))
+            plaintext = plaintext + new_char
+        elif 'A' <= ciphertext[i] <= 'Z':
+            new_char = chr((ord(ciphertext[i]) - ord('A') - shift) % 26 + ord('A'))
+            plaintext = plaintext + new_char
+        else:
+            plaintext = plaintext + ciphertext[i]
+    return plaintext
+
+def run_date_cipher():
+    message = input("Enter message to encode: ")
+    date = input("Enter date (e.g., 5/3/24): ")
+    
+    encoded = date_shift_encipher(message, date)
+    print("Encoded:", encoded)
+    
+    decoded = date_shift_decipher(encoded, date)
+    print("Decoded:", decoded)
+
+run_date_cipher()
