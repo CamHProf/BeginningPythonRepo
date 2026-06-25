@@ -1,0 +1,29 @@
+def calculate_payment(principal, annual_rate, compounding_per_year, num_years):
+    rate_per_period = annual_rate / compounding_per_year
+    total_periods = compounding_per_year * num_years
+    denominator = (1 - (1 + rate_per_period) ** -total_periods) / rate_per_period
+    return principal / denominator
+
+def generate_amortization():
+    principal = float(input("Amount to finance: "))
+    annual_rate = float(input("Annual interest rate (as decimal): "))
+    compounding_per_year = int(input("Compounding periods per year: "))
+    num_years = int(input("Number of years: "))
+    
+    payment = calculate_payment(principal, annual_rate, compounding_per_year, num_years)
+    total_periods = compounding_per_year * num_years
+    rate_per_period = annual_rate / compounding_per_year
+    
+    print("\nPayment\tPayment\tInterest\tPrincipal\tBalance")
+    print("Number\tAmount\t\tPortion\t\tPortion\t\tRemaining")
+    print("-" * 70)
+    
+    balance = principal
+    for period in range(1, total_periods + 1):
+        interest_portion = balance * rate_per_period
+        principal_portion = payment - interest_portion
+        balance = balance - principal_portion
+        
+        print(f"{period:7d}\t${payment:8.2f}\t${interest_portion:8.2f}\t${principal_portion:8.2f}\t${balance:8.2f}")
+
+generate_amortization()
