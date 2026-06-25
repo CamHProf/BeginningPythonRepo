@@ -1,0 +1,32 @@
+def scytale_encipher(plaintext, radius):
+    num_chars = len(plaintext)
+    if num_chars % radius != 0:
+        padding_needed = radius - (num_chars % radius)
+        plaintext = plaintext + 'x' * padding_needed
+    
+    num_columns = len(plaintext) // radius
+    ciphertext = ""
+    for col in range(num_columns):
+        for row in range(radius):
+            ciphertext = ciphertext + plaintext[row * num_columns + col]
+    return ciphertext
+
+def scytale_decipher(ciphertext, radius):
+    num_columns = len(ciphertext) // radius
+    plaintext = ""
+    for row in range(radius):
+        for col in range(num_columns):
+            plaintext = plaintext + ciphertext[col * radius + row]
+    return plaintext
+
+def test_scytale():
+    message = input("Enter message to encipher: ")
+    radius = int(input("Enter cylinder radius: "))
+    
+    enciphered = scytale_encipher(message, radius)
+    print("Enciphered:", enciphered)
+    
+    deciphered = scytale_decipher(enciphered, radius)
+    print("Deciphered:", deciphered)
+
+test_scytale()
