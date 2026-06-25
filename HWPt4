@@ -1,0 +1,53 @@
+def build_cipher_alphabet(keyword):
+    keyword = keyword.upper()
+    cipher_alphabet = ""
+    
+    for char in keyword:
+        if char not in cipher_alphabet:
+            cipher_alphabet = cipher_alphabet + char
+    
+    for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+        if char not in cipher_alphabet:
+            cipher_alphabet = cipher_alphabet + char
+    
+    return cipher_alphabet
+
+def keyword_encipher(message, keyword):
+    cipher_alphabet = build_cipher_alphabet(keyword)
+    plaintext = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    message = message.upper()
+    
+    ciphertext = ""
+    for char in message:
+        if 'A' <= char <= 'Z':
+            index = plaintext.index(char)
+            ciphertext = ciphertext + cipher_alphabet[index]
+        else:
+            ciphertext = ciphertext + char
+    return ciphertext
+
+def keyword_decipher(ciphertext, keyword):
+    cipher_alphabet = build_cipher_alphabet(keyword)
+    plaintext = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    ciphertext = ciphertext.upper()
+    
+    decoded = ""
+    for char in ciphertext:
+        if 'A' <= char <= 'Z':
+            index = cipher_alphabet.index(char)
+            decoded = decoded + plaintext[index]
+        else:
+            decoded = decoded + char
+    return decoded
+
+def run_keyword_cipher():
+    keyword = input("Enter keyword: ")
+    message = input("Enter message to encode: ")
+    
+    encoded = keyword_encipher(message, keyword)
+    print("Encoded:", encoded)
+    
+    decoded = keyword_decipher(encoded, keyword)
+    print("Decoded:", decoded)
+
+run_keyword_cipher()
