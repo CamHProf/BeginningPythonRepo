@@ -1,0 +1,55 @@
+import random, string
+
+def create_grid(msg, rows, cols):
+    msg = msg.upper().replace(" ", "")
+    alpha = string.ascii_uppercase
+    return [[msg[r*cols+c] if r*cols+c < len(msg) else random.choice(alpha)
+             for c in range(cols)] for r in range(rows)]
+
+def get_order(keyword):
+    return [pos for _, pos in sorted([(keyword[i].upper(), i) for i in range(len(keyword))])]
+
+def create_path(rows, cols):
+    path, t, b, l, r = [], 0, rows-1, 0, cols-1
+    while t <= b and l <= r:
+        for c in range(l, r+1): path.append((t, c))
+        t += 1
+        for rw in range(t, b+1): path.append((rw, r))
+        r -= 1
+        if t <= b:
+            for c in range(r, l-1, -1): path.append((b, c))
+            b -= 1
+        if l <= r:
+            for rw in range(b, t-1, -1): path.append((rw, l))
+            l += 1
+    return path
+
+def apply_keyword(grid, order):
+    return [[row[c] for c in order] for row in grid]
+
+def reverse_keyword(grid, order, cols):
+    rev = [0] * cols
+    for new, orig in enumerate(order): rev[orig] = new
+    return [[row[c] for c in rev] for row in grid]
+
+def encrypt(msg, keyword, rows, cols):
+    grid = create_grid(msg, rows, cols)
+    order = get_order(keyword)
+    grid = apply_keyword(grid, order)
+    path = create_path(rows, cols)
+    return ''.join(grid[r][c] for r, c in path), order, path
+
+def decrypt(code, order, path, rows, cols):
+    grid = [[''] * cols for _ in range(rows)]
+    for i, (r, c) in enumerate(path): grid[r][c] = code[i]
+    grid = reverse_keyword(grid, order, cols)
+    return ''.join(grid[r][c] for r in range(rows) for c in range(cols))
+
+def main():
+    msg = "PROGRAMMINGWITHPYTHONISCOOL"
+    enc, order, path = encrypt(msg, "PYTHON", 5, 6)
+    print(f"Original: {msg}")
+    print(f"Encrypted: {' '.join(enc[i:i+5] for i in range(0, len(enc), 5))}")
+    print(f"Decrypted: {decrypt(enc, order, path, 5, 6)}")
+
+if __name__ == "__main__": main()
