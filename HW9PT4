@@ -1,0 +1,43 @@
+import random, string
+
+def create_grid(msg, rows, cols):
+    msg = msg.upper().replace(" ", "")
+    alpha = string.ascii_uppercase
+    return [[msg[r*cols+c] if r*cols+c < len(msg) else random.choice(alpha)
+             for c in range(cols)] for r in range(rows)]
+
+def create_path(rows, cols):
+    # Spiral path
+    path, top, bottom, left, right = [], 0, rows-1, 0, cols-1
+    while top <= bottom and left <= right:
+        for c in range(left, right+1): path.append((top, c))
+        top += 1
+        for r in range(top, bottom+1): path.append((r, right))
+        right -= 1
+        if top <= bottom:
+            for c in range(right, left-1, -1): path.append((bottom, c))
+            bottom -= 1
+        if left <= right:
+            for r in range(bottom, top-1, -1): path.append((r, left))
+            left += 1
+    return path
+
+def encrypt(grid, path):
+    return ''.join(grid[r][c] for r, c in path)
+
+def decrypt(code, path, rows, cols):
+    grid = [[''] * cols for _ in range(rows)]
+    for idx, (r, c) in enumerate(path):
+        grid[r][c] = code[idx]
+    return ''.join(grid[r][c] for r in range(rows) for c in range(cols))
+
+def main():
+    msg = "PROGRAMMINGWITHPYTHONISCOOL"
+    grid = create_grid(msg, 5, 6)
+    path = create_path(5, 6)
+    enc = encrypt(grid, path)
+    print(f"Original: {msg}")
+    print(f"Encrypted: {' '.join(enc[i:i+5] for i in range(0, len(enc), 5))}")
+    print(f"Decrypted: {decrypt(enc, path, 5, 6)}")
+
+if __name__ == "__main__": main()
