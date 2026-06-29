@@ -1,16 +1,32 @@
-def amortization(p, r, y, fname):
-    with open(fname, 'w') as f:
-        mr, m = r/12/100, y*12
-        pmt = p * mr / (1 - (1 + mr) ** -m)
-        f.write(f"Principal: ${p:.2f}\nRate: {r}%\nYears: {y}\nPayment: ${pmt:.2f}\n\n")
-        f.write(f"{'Month':<6}{'Payment':<10}{'Interest':<10}{'Principal':<10}{'Balance':<10}\n")
-        bal = p
-        for i in range(1, m+1):
-            int_ = bal * mr
-            pp = pmt - int_
-            bal -= pp
-            f.write(f"{i:<6}${pmt:<9.2f}${int_:<9.2f}${pp:<9.2f}${bal:<9.2f}\n")
-    print(f"Saved to {fname}")
+def amortization(principal, rate, years, filename):
+    """Generates amortization report and writes to file."""
+    with open(filename, 'w') as f:
+        monthly_rate = rate / 12 / 100
+        months = years * 12
+        payment = principal * monthly_rate / (1 - (1 + monthly_rate) ** -months)
+        
+        f.write(f"Principal: ${principal:.2f}\n")
+        f.write(f"Annual Rate: {rate}%\n")
+        f.write(f"Years: {years}\n")
+        f.write(f"Monthly Payment: ${payment:.2f}\n\n")
+        f.write(f"{'Month':<6} {'Payment':<10} {'Interest':<10} {'Principal':<10} {'Balance':<10}\n")
+        f.write("-" * 50 + "\n")
+        
+        balance = principal
+        for month in range(1, months + 1):
+            interest = balance * monthly_rate
+            principal_paid = payment - interest
+            balance -= principal_paid
+            f.write(f"{month:<6} ${payment:<9.2f} ${interest:<9.2f} ${principal_paid:<9.2f} ${balance:<9.2f}\n")
+    
+    print(f"Report saved to {filename}")
 
-p, r, y, f = float(input("Principal: ")), float(input("Rate: ")), int(input("Years: ")), input("Filename: ")
-amortization(p, r, y, f)
+def main():
+    p = float(input("Enter principal: "))
+    r = float(input("Enter annual rate (%): "))
+    y = int(input("Enter years: "))
+    fname = input("Enter output filename: ")
+    amortization(p, r, y, fname)
+
+if __name__ == "__main__":
+    main()
