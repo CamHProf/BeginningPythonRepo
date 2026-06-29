@@ -1,0 +1,26 @@
+def read_path(fname):
+    return [tuple(map(int, line.strip().strip('()').split(','))) for line in open(fname) if line.strip()]
+
+def create_grid(msg, r, c):
+    import random, string
+    msg = msg.upper().replace(" ", "")
+    return [[msg[r*c+c2] if r*c+c2 < len(msg) else random.choice(string.ascii_uppercase) for c2 in range(c)] for r2 in range(r)]
+
+def enc(grid, path): return ''.join(grid[r][c] for r,c in path)
+def dec(code, path, r, c):
+    grid = [['']*c for _ in range(r)]
+    [grid.__setitem__((lambda i: (r,c))[0], code[i]) for i,(r,c) in enumerate(path)]  # Simplified below
+
+# Cleaner compressed version:
+def decrypt(code, path, rows, cols):
+    grid = [['']*cols for _ in range(rows)]
+    for i,(r,c) in enumerate(path): grid[r][c] = code[i]
+    return ''.join(grid[r][c] for r in range(rows) for c in range(cols))
+
+msg, rows, cols = "PROGRAMMINGWITHPYTHONISCOOL", 5, 6
+# Create sample path
+open('path.txt','w').write('\n'.join(f"({r},{c})" for r in range(rows) for c in range(cols)))
+path = read_path('path.txt')
+grid = create_grid(msg, rows, cols)
+encrypted = enc(grid, path)
+print(f"Original: {msg}\nEncrypted: {' '.join(encrypted[i:i+5] for i in range(0,len(encrypted),5))}\nDecrypted: {decrypt(encrypted, path, rows, cols)}")
