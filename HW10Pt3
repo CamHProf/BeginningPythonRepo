@@ -1,20 +1,43 @@
-import string, matplotlib.pyplot as plt
-from collections import Counter
+import string
+import matplotlib.pyplot as plt
 
-def analyze(fname):
-    with open(fname, 'r', encoding='utf-8') as f:
+def analyze_file(filename):
+    """Counts letter frequencies in a file."""
+    counts = {ch: 0 for ch in string.ascii_lowercase}
+    total = 0
+    
+    with open(filename, 'r', encoding='utf-8') as f:
         text = f.read().lower()
-    counts = Counter(ch for ch in text if ch in string.ascii_lowercase)
-    total = sum(counts.values())
+        for ch in text:
+            if ch in counts:
+                counts[ch] += 1
+                total += 1
+    
     return counts, total
 
-def display(counts, total):
-    plt.bar(string.ascii_lowercase, [counts[ch]/total*100 for ch in string.ascii_lowercase])
-    plt.title('Letter Frequency'); plt.xlabel('Letters'); plt.ylabel('Frequency (%)'); plt.grid(axis='y', alpha=0.3)
+def display_graph(counts, total):
+    """Displays frequency bar chart."""
+    letters = list(string.ascii_lowercase)
+    frequencies = [counts[ch] / total * 100 for ch in letters]
+    
+    plt.figure(figsize=(12, 6))
+    plt.bar(letters, frequencies)
+    plt.title('Letter Frequency Analysis')
+    plt.xlabel('Letters')
+    plt.ylabel('Frequency (%)')
+    plt.grid(axis='y', alpha=0.3)
     plt.show()
 
-fname = input("Filename: ")
-counts, total = analyze(fname)
-for ch in string.ascii_lowercase:
-    print(f"{ch}: {counts[ch]/total*100:.2f}% ({counts[ch]})")
-display(counts, total)
+def main():
+    filename = input("Enter filename: ")
+    counts, total = analyze_file(filename)
+    
+    print("\nLetter Frequencies:")
+    for ch in string.ascii_lowercase:
+        pct = counts[ch] / total * 100
+        print(f"{ch}: {pct:.2f}% ({counts[ch]} occurrences)")
+    
+    display_graph(counts, total)
+
+if __name__ == "__main__":
+    main()
