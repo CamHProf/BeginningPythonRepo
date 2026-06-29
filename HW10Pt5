@@ -1,0 +1,65 @@
+import urllib.request
+import string
+import matplotlib.pyplot as plt
+
+def fetch_text(url):
+    """Fetches text from URL."""
+    with urllib.request.urlopen(url) as response:
+        return response.read().decode('utf-8', errors='ignore')
+
+def analyze_text(text):
+    """Counts character frequencies (only ASCII letters)."""
+    counts = {ch: 0 for ch in string.ascii_lowercase}
+    total = 0
+    
+    # Only count characters in the lower 256 ASCII range
+    for ch in text.lower():
+        if ch in counts:  # Only a-z
+            counts[ch] += 1
+            total += 1
+    
+    return counts, total
+
+def save_results(counts, total, filename):
+    """Saves frequency results to file."""
+    with open(filename, 'w') as f:
+        f.write("Letter,Count,Frequency(%)\n")
+        for ch in string.ascii_lowercase:
+            pct = counts[ch] / total * 100
+            f.write(f"{ch},{counts[ch]},{pct:.2f}\n")
+    print(f"Results saved to {filename}")
+
+def display_graph(counts, total):
+    """Displays frequency bar chart."""
+    letters = list(string.ascii_lowercase)
+    frequencies = [counts[ch] / total * 100 for ch in letters]
+    
+    plt.figure(figsize=(12, 6))
+    plt.bar(letters, frequencies, color='skyblue')
+    plt.title('Letter Frequency Analysis from Internet Text')
+    plt.xlabel('Letters')
+    plt.ylabel('Frequency (%)')
+    plt.grid(axis='y', alpha=0.3)
+    plt.show()
+
+def main():
+    url = input("Enter URL: ")
+    output_file = input("Enter output filename: ")
+    
+    print("Fetching text...")
+    text = fetch_text(url)
+    
+    print("Analyzing frequencies...")
+    counts, total = analyze_text(text)
+    
+    print("\nTop 5 Letters:")
+    top5 = sorted([(counts[ch], ch) for ch in string.ascii_lowercase], reverse=True)[:5]
+    for count, ch in top5:
+        pct = count / total * 100
+        print(f"  {ch}: {pct:.2f}% ({count} occurrences)")
+    
+    save_results(counts, total, output_file)
+    display_graph(counts, total)
+
+if __name__ == "__main__":
+    main()
