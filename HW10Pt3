@@ -1,0 +1,20 @@
+import string, matplotlib.pyplot as plt
+from collections import Counter
+
+def analyze(fname):
+    with open(fname, 'r', encoding='utf-8') as f:
+        text = f.read().lower()
+    counts = Counter(ch for ch in text if ch in string.ascii_lowercase)
+    total = sum(counts.values())
+    return counts, total
+
+def display(counts, total):
+    plt.bar(string.ascii_lowercase, [counts[ch]/total*100 for ch in string.ascii_lowercase])
+    plt.title('Letter Frequency'); plt.xlabel('Letters'); plt.ylabel('Frequency (%)'); plt.grid(axis='y', alpha=0.3)
+    plt.show()
+
+fname = input("Filename: ")
+counts, total = analyze(fname)
+for ch in string.ascii_lowercase:
+    print(f"{ch}: {counts[ch]/total*100:.2f}% ({counts[ch]})")
+display(counts, total)
