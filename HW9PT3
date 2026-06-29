@@ -1,0 +1,31 @@
+def create_grid(msg, rows, cols):
+    msg = msg.upper().replace(" ", "")
+    return [[msg[r*cols+c] if r*cols+c < len(msg) else 'X' 
+             for c in range(cols)] for r in range(rows)]
+
+def get_column_order(keyword):
+    return [pos for _, pos in sorted([(keyword[i].upper(), i) for i in range(len(keyword))])]
+
+def encrypt(grid, order):
+    return ''.join(grid[r][c] for c in order for r in range(len(grid)))
+
+def decrypt(code, order, rows, cols):
+    grid = [[''] * cols for _ in range(rows)]
+    idx = 0
+    for c in order:
+        for r in range(rows):
+            grid[r][c] = code[idx]
+            idx += 1
+    msg = ''.join(grid[r][c] for r in range(rows) for c in range(cols))
+    return msg.rstrip('X')
+
+def main():
+    msg = "PROGRAMMINGWITHPYTHONISCOOL"
+    order = get_column_order("PYTHON")
+    grid = create_grid(msg, 5, 6)
+    enc = encrypt(grid, order)
+    print(f"Original: {msg}")
+    print(f"Encrypted: {' '.join(enc[i:i+5] for i in range(0, len(enc), 5))}")
+    print(f"Decrypted: {decrypt(enc, order, 5, 6)}")
+
+if __name__ == "__main__": main()
