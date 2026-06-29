@@ -1,0 +1,17 @@
+import os, string, matplotlib.pyplot as plt
+from collections import Counter
+
+def analyze_py(dir):
+    counts = Counter()
+    for f in os.listdir(dir):
+        if f.endswith('.py'):
+            with open(os.path.join(dir,f), 'r', encoding='utf-8') as file:
+                counts.update(ch for ch in file.read().lower() if ch in string.ascii_lowercase)
+    return counts, sum(counts.values())
+
+dir = input("Directory: ")
+counts, total = analyze_py(dir)
+for ch in string.ascii_lowercase:
+    print(f"{ch}: {counts[ch]/total*100:.2f}%")
+plt.bar(string.ascii_lowercase, [counts[ch]/total*100 for ch in string.ascii_lowercase])
+plt.title('Python Code Frequency'); plt.xlabel('Letters'); plt.ylabel('Frequency (%)'); plt.show()
