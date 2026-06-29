@@ -1,0 +1,43 @@
+def create_board():
+    alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+    return [[alpha[r*5+c] for c in range(5)] for r in range(5)]
+
+def find_letter(board, ch):
+    ch = 'I' if ch.upper() == 'J' else ch.upper()
+    for r in range(5):
+        for c in range(5):
+            if board[r][c] == ch:
+                return (r, c)
+    return None
+
+def encrypt(msg, board):
+    result = ""
+    for ch in msg.upper():
+        pos = find_letter(board, ch)
+        if pos:
+            result += f"{pos[0]+1}{pos[1]+1}"
+        else:
+            result += ch
+    return result
+
+def decrypt(code, board):
+    result, i = "", 0
+    while i < len(code):
+        if code[i].isdigit() and i+1 < len(code):
+            r, c = int(code[i])-1, int(code[i+1])-1
+            result += board[r][c] if 0 <= r < 5 and 0 <= c < 5 else ''
+            i += 2
+        else:
+            result += code[i]
+            i += 1
+    return result
+
+def main():
+    board = create_board()
+    msg = "HELLO WORLD"
+    enc = encrypt(msg, board)
+    print(f"Original: {msg}")
+    print(f"Encrypted: {enc}")
+    print(f"Decrypted: {decrypt(enc, board)}")
+
+if __name__ == "__main__": main()
