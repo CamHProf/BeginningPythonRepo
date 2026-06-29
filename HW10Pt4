@@ -1,17 +1,47 @@
-import os, string, matplotlib.pyplot as plt
-from collections import Counter
+import os
+import string
+import matplotlib.pyplot as plt
 
-def analyze_py(dir):
-    counts = Counter()
-    for f in os.listdir(dir):
-        if f.endswith('.py'):
-            with open(os.path.join(dir,f), 'r', encoding='utf-8') as file:
-                counts.update(ch for ch in file.read().lower() if ch in string.ascii_lowercase)
-    return counts, sum(counts.values())
+def analyze_py_files(directory):
+    """Analyzes all .py files in directory."""
+    counts = {ch: 0 for ch in string.ascii_lowercase}
+    total = 0
+    
+    for filename in os.listdir(directory):
+        if filename.endswith('.py'):
+            with open(os.path.join(directory, filename), 'r', encoding='utf-8') as f:
+                text = f.read().lower()
+                for ch in text:
+                    if ch in counts:
+                        counts[ch] += 1
+                        total += 1
+    
+    return counts, total
 
-dir = input("Directory: ")
-counts, total = analyze_py(dir)
-for ch in string.ascii_lowercase:
-    print(f"{ch}: {counts[ch]/total*100:.2f}%")
-plt.bar(string.ascii_lowercase, [counts[ch]/total*100 for ch in string.ascii_lowercase])
-plt.title('Python Code Frequency'); plt.xlabel('Letters'); plt.ylabel('Frequency (%)'); plt.show()
+def display_comparison(py_counts, py_total, english_counts):
+    """Compares Python vs English frequencies."""
+    letters = list(string.ascii_lowercase)
+    py_freq = [py_counts[ch] / py_total * 100 for ch in letters]
+    
+    plt.figure(figsize=(14, 6))
+    plt.bar(letters, py_freq, alpha=0.7, label='Python Code')
+    plt.title('Python Code Letter Frequency')
+    plt.xlabel('Letters')
+    plt.ylabel('Frequency (%)')
+    plt.grid(axis='y', alpha=0.3)
+    plt.legend()
+    plt.show()
+
+def main():
+    directory = input("Enter directory path: ")
+    counts, total = analyze_py_files(directory)
+    
+    print("\nPython Code Letter Frequencies:")
+    for ch in string.ascii_lowercase:
+        pct = counts[ch] / total * 100
+        print(f"{ch}: {pct:.2f}% ({counts[ch]} occurrences)")
+    
+    display_comparison(counts, total, None)
+
+if __name__ == "__main__":
+    main()
