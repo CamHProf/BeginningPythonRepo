@@ -1,26 +1,48 @@
-def read_path(fname):
-    return [tuple(map(int, line.strip().strip('()').split(','))) for line in open(fname) if line.strip()]
+def read_path(filename):
+    """Reads path from file containing (row, col) tuples."""
+    path = []
+    with open(filename, 'r') as f:
+        for line in f:
+            if line.strip():
+                # Expect format: (row, col)
+                parts = line.strip().strip('()').split(',')
+                if len(parts) == 2:
+                    path.append((int(parts[0]), int(parts[1])))
+    return path
 
-def create_grid(msg, r, c):
-    import random, string
+def create_grid(msg, rows, cols):
     msg = msg.upper().replace(" ", "")
-    return [[msg[r*c+c2] if r*c+c2 < len(msg) else random.choice(string.ascii_uppercase) for c2 in range(c)] for r2 in range(r)]
+    import random, string
+    alpha = string.ascii_uppercase
+    return [[msg[r*cols+c] if r*cols+c < len(msg) else random.choice(alpha)
+             for c in range(cols)] for r in range(rows)]
 
-def enc(grid, path): return ''.join(grid[r][c] for r,c in path)
-def dec(code, path, r, c):
-    grid = [['']*c for _ in range(r)]
-    [grid.__setitem__((lambda i: (r,c))[0], code[i]) for i,(r,c) in enumerate(path)]  # Simplified below
+def encrypt(grid, path):
+    return ''.join(grid[r][c] for r, c in path)
 
-# Cleaner compressed version:
 def decrypt(code, path, rows, cols):
-    grid = [['']*cols for _ in range(rows)]
-    for i,(r,c) in enumerate(path): grid[r][c] = code[i]
+    grid = [[''] * cols for _ in range(rows)]
+    for i, (r, c) in enumerate(path):
+        grid[r][c] = code[i]
     return ''.join(grid[r][c] for r in range(rows) for c in range(cols))
 
-msg, rows, cols = "PROGRAMMINGWITHPYTHONISCOOL", 5, 6
-# Create sample path
-open('path.txt','w').write('\n'.join(f"({r},{c})" for r in range(rows) for c in range(cols)))
-path = read_path('path.txt')
-grid = create_grid(msg, rows, cols)
-encrypted = enc(grid, path)
-print(f"Original: {msg}\nEncrypted: {' '.join(encrypted[i:i+5] for i in range(0,len(encrypted),5))}\nDecrypted: {decrypt(encrypted, path, rows, cols)}")
+def main():
+    msg = "PROGRAMMINGWITHPYTHONISCOOL"
+    rows, cols = 5, 6
+    
+    # Create sample path file
+    with open('path.txt', 'w') as f:
+        for r in range(rows):
+            for c in range(cols):
+                f.write(f"({r}, {c})\n")
+    
+    path = read_path('path.txt')
+    grid = create_grid(msg, rows, cols)
+    enc = encrypt(grid, path)
+    
+    print(f"Original: {msg}")
+    print(f"Encrypted: {' '.join(enc[i:i+5] for i in range(0, len(enc), 5))}")
+    print(f"Decrypted: {decrypt(enc, path, rows, cols)}")
+
+if __name__ == "__main__":
+    main()
