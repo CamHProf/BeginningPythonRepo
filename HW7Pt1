@@ -1,0 +1,12 @@
+def simpleDiv(dividend, divisor):
+    count = 0
+    while dividend >= divisor:
+        dividend -= divisor
+        count += 1
+    return count
+
+def main():
+    d1, d2 = int(input("Dividend: ")), int(input("Divisor: "))
+    print(f"{d1} // {d2} = {simpleDiv(d1, d2)}")
+
+if __name__ == "__main__": main()
