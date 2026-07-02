@@ -1,0 +1,24 @@
+from graphics import *
+
+def is_click_in_button(click, button):
+    """Returns True if click is inside button rectangle."""
+    p1, p2 = button.getP1(), button.getP2()
+    x, y = click.getX(), click.getY()
+    return p1.getX() <= x <= p2.getX() and p1.getY() <= y <= p2.getY()
+
+def main():
+    win = GraphWin("Button Demo", 300, 200)
+    btn = Rectangle(Point(50, 50), Point(250, 150))
+    btn.setFill("lightgray")
+    btn.draw(win)
+    Text(btn.getCenter(), "Click Me").draw(win)
+    
+    while True:
+        click = win.getMouse()
+        if is_click_in_button(click, btn):
+            Text(Point(150, 180), "Button clicked!").draw(win)
+            break
+    
+    win.getMouse(); win.close()
+
+if __name__ == "__main__": main()
