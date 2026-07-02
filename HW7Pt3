@@ -1,0 +1,12 @@
+def bounce_simulation(initial_height):
+    height, bounces = initial_height, 0
+    while height >= 0.001:  # 1 mm = 0.001 meters
+        height *= 0.6
+        bounces += 1
+    return bounces
+
+def main():
+    h = float(input("Initial height (meters): "))
+    print(f"The ball bounces {bounce_simulation(h)} times before dropping below 1 mm")
+
+if __name__ == "__main__": main()
