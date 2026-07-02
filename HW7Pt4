@@ -1,0 +1,42 @@
+from graphics import *
+import time
+
+def main():
+    win = GraphWin("Bouncing Ball", 400, 400)
+    win.setCoords(0, 0, 10, 10)  # Map coordinates
+    
+    # Get initial height
+    entry = Entry(Point(5, 5), 5)
+    entry.draw(win)
+    Text(Point(5, 6), "Release height (m):").draw(win)
+    win.getMouse()
+    
+    height = float(entry.getText())
+    entry.undraw()
+    win.setCoords(0, 0, 10, height + 1)
+    
+    # Create ball
+    ball = Circle(Point(5, height), 0.3)
+    ball.setFill("red")
+    ball.draw(win)
+    
+    bounces = 0
+    while height >= 0.001:
+        # Move up
+        for y in range(int(height * 10), -1, -1):
+            ball.move(0, -0.1)
+            time.sleep(0.01)
+        
+        # Move down
+        for y in range(0, int(height * 10) + 1):
+            ball.move(0, 0.1)
+            time.sleep(0.01)
+        
+        height *= 0.6
+        bounces += 1
+        Text(Point(5, height + 0.5), f"Bounce {bounces}").draw(win)
+    
+    Text(Point(5, height + 0.3), f"Total bounces: {bounces}").draw(win)
+    win.getMouse(); win.close()
+
+if __name__ == "__main__": main()
